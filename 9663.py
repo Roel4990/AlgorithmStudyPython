@@ -1,38 +1,21 @@
-import sys
-input = sys.stdin.readline
+def dfs(row, cols, diag1, diag2):
+    global n
+    # 모든 행을 배치한 경우 -> 해답 1개 완성
+    if row == n:
+        return 1
 
+    count = 0
+    available = ((1 << n) - 1) & ~(cols | diag1 | diag2)
+    while available:
+        col = available & -available  # 가장 오른쪽 1비트 선택
+        available -= col
+        count += dfs(
+            row + 1,
+            cols | col,
+            (diag1 | col) << 1,
+            (diag2 | col) >> 1
+        )
+    return count
 
-result = 0
-def dfs(count):
-    global result
-    if count == N:
-        result += 1
-    for i in range(0, N):
-        for j in range(0, N):
-            if visited[i][j]:
-                continue
-            visited[i][j] = True
-            for a in range(N):
-                visited[i][a] = True  # 수평선
-                visited[a][j] = True  # 수직선
-            for a in range(N):
-                if 0 <= i + a < N and 0 <= j + a < N:
-                    visited[i + a][j + a] = True
-                if 0 <= i - a < N and 0 <= j - a < N:
-                    visited[i - a][j - a] = True
-                    # 부 대각선
-                if 0 <= i + a < N and 0 <= j - a < N:
-                    visited[i + a][j - a] = True
-                if 0 <= i - a < N and 0 <= j + a < N:
-                    visited[i - a][j + a] = True
-
-            dfs(count + 1)
-
-
-
-N = int(input())
-visited = [[False] * N for _ in range(N)]
-
-dfs(1)
-
-print(result)
+n = int(input().strip())
+print(dfs(0, 0, 0, 0))
