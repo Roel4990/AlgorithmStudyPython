@@ -9,8 +9,6 @@ for _ in range(T):
     NList = []
     for _ in range(N):
         a, b  = map(int, input().split())
-        # if b == 1:
-        #     aFind = a
         NList.append((a, b))
     NList.sort(key=lambda x: (x[0]))
     cnt = 0
